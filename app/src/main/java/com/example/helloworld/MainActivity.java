@@ -121,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
                 if (articleData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.txt", new TextHttpResponseHandler() {
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
