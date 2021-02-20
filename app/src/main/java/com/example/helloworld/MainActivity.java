@@ -1,5 +1,6 @@
 package com.example.helloworld;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -15,7 +16,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -25,12 +25,25 @@ public class MainActivity extends AppCompatActivity {
 
     final List<String> blogData = new ArrayList<>();
     final List<String> articleData = new ArrayList<>();
+    final List<String> bookData = new ArrayList<>();
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Button me = findViewById(R.id.me_button);
+        me.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Intent intent = new Intent(MainActivity.this, BlogActivity.class);
+                startActivity(intent);
+
+            }
+        });
+
 
 
         final List<String> data = new ArrayList<>();
@@ -58,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
                 if (blogData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.txt", new TextHttpResponseHandler() {
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -156,6 +169,67 @@ public class MainActivity extends AppCompatActivity {
 
 
                     for (String item : articleData) {
+                        data.add(item);
+                    }
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
+
+                }
+            }
+        });
+
+        final Button bookBtn = findViewById(R.id.book_button);
+        bookBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                data.clear();
+
+                if (bookData.size() == 0) {
+
+                    AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            System.out.println(responseString);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            try {
+                                JSONObject jsonObject = new JSONObject(responseString);
+                                JSONArray blog = jsonObject.getJSONArray("book");
+                                for (int i = 0; i < blog.length(); i++) {
+                                    data.add(blog.getString(i));
+                                    bookData.add(blog.getString(i));
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+
+                } else {
+
+
+                    for (String item : bookData) {
                         data.add(item);
                     }
 

@@ -31,9 +31,32 @@
         <Button
             android:id="@+id/article_button"
             android:layout_width="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="文章" />
+
+
+        <Button
+            android:id="@+id/book_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="书籍" />
+
+
+        <Button
+            android:id="@+id/blog_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="博客" />
+
+        <Button
+            android:id="@+id/me_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="我的" />
 
 
         <Button
@@ -42,14 +65,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="刷新" />
-
-
-        <Button
-            android:id="@+id/blog_button"
-            android:layout_width="wrap_content"
-            android:layout_weight="3"
-            android:layout_height="wrap_content"
-            android:text="博客" />
 
 
     </LinearLayout>
