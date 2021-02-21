@@ -29,6 +29,14 @@
 
 
         <Button
+            android:id="@+id/news_button"
+            android:layout_width="wrap_content"
+            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:text="资讯" />
+
+
+        <Button
             android:id="@+id/article_button"
             android:layout_width="wrap_content"
             android:layout_weight="1"
@@ -57,14 +65,6 @@
             android:layout_weight="1"
             android:layout_height="wrap_content"
             android:text="我的" />
-
-
-        <Button
-            android:id="@+id/article_refresh"
-            android:layout_width="wrap_content"
-            android:layout_weight="1"
-            android:layout_height="wrap_content"
-            android:text="刷新" />
 
 
     </LinearLayout>

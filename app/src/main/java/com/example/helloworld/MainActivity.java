@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
 
     final List<String> blogData = new ArrayList<>();
     final List<String> articleData = new ArrayList<>();
+    final List<String> newsData = new ArrayList<>();
     final List<String> bookData = new ArrayList<>();
 
 
@@ -52,12 +53,67 @@ public class MainActivity extends AppCompatActivity {
         final ListView listView = findViewById(R.id.list_view);
         listView.setAdapter(adapter);
 
-        Button refreshBtn = findViewById(R.id.article_refresh);
-        refreshBtn.setOnClickListener(new View.OnClickListener() {
+
+        Button newsButton = findViewById(R.id.news_button);
+        newsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
                 data.clear();
-                adapter.notifyDataSetChanged();
+
+                if (blogData.size() == 0) {
+
+                    AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-news.json", new TextHttpResponseHandler() {
+                        @Override
+                        public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
+                            System.out.println(responseString);
+                        }
+
+                        @Override
+                        public void onSuccess(int statusCode, Header[] headers, String responseString) {
+                            try {
+
+
+                                JSONArray array = new JSONArray(responseString);
+                                for (int i = 0; i < array.length(); i++) {
+                                    data.add(array.getString(i));
+                                    newsData.add(array.getString(i));
+                                }
+
+                                runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        adapter.notifyDataSetChanged();
+                                    }
+                                });
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+
+                        }
+                    });
+
+
+                } else {
+
+
+                    data.clear();
+                    for (String blogDatum : newsData) {
+                        data.add(blogDatum);
+                    }
+
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            adapter.notifyDataSetChanged();
+                        }
+                    });
+
+
+                }
             }
         });
 
@@ -71,7 +127,7 @@ public class MainActivity extends AppCompatActivity {
                 if (blogData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-blogs.json", new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -80,11 +136,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try {
-                                JSONObject jsonObject = new JSONObject(responseString);
-                                JSONArray blog = jsonObject.getJSONArray("blog");
-                                for (int i = 0; i < blog.length(); i++) {
-                                    data.add(blog.getString(i));
-                                    blogData.add(blog.getString(i));
+
+
+                                JSONArray array = new JSONArray(responseString);
+                                for (int i = 0; i < array.length(); i++) {
+                                    data.add(array.getString(i));
+                                    blogData.add(array.getString(i));
                                 }
 
                                 runOnUiThread(new Runnable() {
@@ -134,7 +191,7 @@ public class MainActivity extends AppCompatActivity {
                 if (articleData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-articles.json", new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -143,11 +200,12 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try {
-                                JSONObject jsonObject = new JSONObject(responseString);
-                                JSONArray blog = jsonObject.getJSONArray("news");
-                                for (int i = 0; i < blog.length(); i++) {
-                                    data.add(blog.getString(i));
-                                    articleData.add(blog.getString(i));
+
+
+                                JSONArray array = new JSONArray(responseString);
+                                for (int i = 0; i < array.length(); i++) {
+                                    data.add(array.getString(i));
+                                    articleData.add(array.getString(i));
                                 }
 
                                 runOnUiThread(new Runnable() {
@@ -195,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                 if (bookData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/data.json", new TextHttpResponseHandler() {
+                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-books.json", new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -204,11 +262,10 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try {
-                                JSONObject jsonObject = new JSONObject(responseString);
-                                JSONArray blog = jsonObject.getJSONArray("book");
-                                for (int i = 0; i < blog.length(); i++) {
-                                    data.add(blog.getString(i));
-                                    bookData.add(blog.getString(i));
+                                JSONArray array = new JSONArray(responseString);
+                                for (int i = 0; i < array.length(); i++) {
+                                    data.add(array.getString(i));
+                                    bookData.add(array.getString(i));
                                 }
 
                                 runOnUiThread(new Runnable() {
