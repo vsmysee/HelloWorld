@@ -15,6 +15,7 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.json.JSONObject;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -31,6 +32,7 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity {
 
     final List<String> blogData = new ArrayList<>();
+    final List<String> blogLink = new ArrayList<>();
     final List<String> articleData = new ArrayList<>();
     final List<String> newsData = new ArrayList<>();
     final List<String> bookData = new ArrayList<>();
@@ -60,9 +62,16 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Object item = adapter.getItem(position);
+
+                if (blogLink.size() == 0) {
+                    return;
+                }
+
+                final String link = blogLink.get(position);
 
                 new Thread(new Runnable() {
                     @Override
@@ -70,7 +79,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             StringBuffer sb = new StringBuffer();
                             sb.append("<html><body>");
-                            Document doc = Jsoup.connect("https://afoo.me/posts/2021-02-19-tech-releases-looking-forward-to-this-year.html").get();
+                            Document doc = Jsoup.connect("https://afoo.me" + link).get();
                             Elements list = doc.select("p");
                             for (Element element : list) {
                                 sb.append("<p>");
@@ -90,7 +99,6 @@ public class MainActivity extends AppCompatActivity {
                 }).start();
 
 
-
             }
         });
 
@@ -105,7 +113,7 @@ public class MainActivity extends AppCompatActivity {
 
                 data.clear();
 
-                if (blogData.size() == 0) {
+                if (newsData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
                     String url = "http://myfiledata.test.upcdn.net/data/" + day + "-news.json";
@@ -187,8 +195,10 @@ public class MainActivity extends AppCompatActivity {
 
                                 JSONArray array = new JSONArray(responseString);
                                 for (int i = 0; i < array.length(); i++) {
-                                    data.add(array.getString(i));
-                                    blogData.add(array.getString(i));
+                                    JSONObject jo = array.getJSONObject(i);
+                                    data.add(jo.getString("name"));
+                                    blogData.add(jo.getString("name"));
+                                    blogLink.add(jo.getString("link"));
                                 }
 
                                 runOnUiThread(new Runnable() {
