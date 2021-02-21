@@ -3,6 +3,7 @@ package com.example.helloworld;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
@@ -14,7 +15,12 @@ import com.loopj.android.http.TextHttpResponseHandler;
 
 import org.json.JSONArray;
 import org.json.JSONException;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -47,12 +53,46 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
         final List<String> data = new ArrayList<>();
         final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
 
         final ListView listView = findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Object item = adapter.getItem(position);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            StringBuffer sb = new StringBuffer();
+                            sb.append("<html><body>");
+                            Document doc = Jsoup.connect("https://afoo.me/posts/2021-02-19-tech-releases-looking-forward-to-this-year.html").get();
+                            Elements list = doc.select("p");
+                            for (Element element : list) {
+                                sb.append("<p>");
+                                sb.append(element.text());
+                                sb.append("</p>");
+                            }
+                            sb.append("</body></html>");
+
+                            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                            intent.putExtra("html", sb.toString());
+                            startActivity(intent);
+
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }).start();
+
+
+
+            }
+        });
 
 
         SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
