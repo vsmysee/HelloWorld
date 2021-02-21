@@ -15,7 +15,9 @@ import com.loopj.android.http.TextHttpResponseHandler;
 import org.json.JSONArray;
 import org.json.JSONException;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import cz.msebera.android.httpclient.Header;
@@ -53,6 +55,9 @@ public class MainActivity extends AppCompatActivity {
         listView.setAdapter(adapter);
 
 
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        final String day = format.format(new Date());
+
         Button newsButton = findViewById(R.id.news_button);
         newsButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,7 +68,8 @@ public class MainActivity extends AppCompatActivity {
                 if (blogData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-news.json", new TextHttpResponseHandler() {
+                    String url = "http://myfiledata.test.upcdn.net/data/" + day + "-news.json";
+                    asyncHttpClient.get(url, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -126,7 +132,9 @@ public class MainActivity extends AppCompatActivity {
                 if (blogData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-blogs.json", new TextHttpResponseHandler() {
+                    String url = "http://myfiledata.test.upcdn.net/data/" + day + "-blogs.json";
+
+                    asyncHttpClient.get(url, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -190,7 +198,9 @@ public class MainActivity extends AppCompatActivity {
                 if (articleData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-articles.json", new TextHttpResponseHandler() {
+                    String url = "http://myfiledata.test.upcdn.net/data/" + day + "-articles.json";
+
+                    asyncHttpClient.get(url, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
@@ -252,7 +262,8 @@ public class MainActivity extends AppCompatActivity {
                 if (bookData.size() == 0) {
 
                     AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
-                    asyncHttpClient.get("http://myfiledata.test.upcdn.net/data/2021-02-21-books.json", new TextHttpResponseHandler() {
+                    String url = "http://myfiledata.test.upcdn.net/data/" + day + "-books.json";
+                    asyncHttpClient.get(url, new TextHttpResponseHandler() {
                         @Override
                         public void onFailure(int statusCode, Header[] headers, String responseString, Throwable throwable) {
                             System.out.println(responseString);
