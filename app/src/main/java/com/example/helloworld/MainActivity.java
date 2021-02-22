@@ -33,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
 
     final List<String> blogData = new ArrayList<>();
     final List<String> blogLink = new ArrayList<>();
+    final List<String> blogUrl = new ArrayList<>();
     final List<String> articleData = new ArrayList<>();
     final List<String> newsData = new ArrayList<>();
     final List<String> bookData = new ArrayList<>();
@@ -65,11 +66,12 @@ public class MainActivity extends AppCompatActivity {
 
 
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 if (blogLink.size() == 0) {
                     return;
                 }
+
 
                 final String link = blogLink.get(position);
 
@@ -79,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                         try {
                             StringBuffer sb = new StringBuffer();
                             sb.append("<html><body>");
-                            Document doc = Jsoup.connect("https://afoo.me" + link).get();
+                            Document doc = Jsoup.connect(blogUrl.get(position) + link).get();
                             Elements list = doc.select("p");
                             for (Element element : list) {
                                 sb.append("<p>");
@@ -198,7 +200,12 @@ public class MainActivity extends AppCompatActivity {
                                     JSONObject jo = array.getJSONObject(i);
                                     data.add(jo.getString("name"));
                                     blogData.add(jo.getString("name"));
-                                    blogLink.add(jo.getString("link"));
+                                    if (jo.has("link")) {
+                                        blogLink.add(jo.getString("link"));
+                                    }
+                                    if (jo.has("url")) {
+                                        blogUrl.add(jo.getString("url"));
+                                    }
                                 }
 
                                 runOnUiThread(new Runnable() {
