@@ -32,7 +32,7 @@ public class ShowActivity extends AppCompatActivity {
         String html = intent.getStringExtra("html");
 
         WebView webView = findViewById(R.id.webview);
-        webView.loadUrl("http://myfiledata.test.upcdn.net/data/" + html + ".html");
+        webView.loadUrl("http://myfiledata.test.upcdn.net/blog/" + html + ".html");
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
