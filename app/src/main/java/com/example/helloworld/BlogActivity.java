@@ -18,7 +18,7 @@ public class BlogActivity extends AppCompatActivity {
         setContentView(R.layout.blog);
 
         TextView textView = findViewById(R.id.back);
-        textView.setText("<< 返回");
+        textView.setText("<<");
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override

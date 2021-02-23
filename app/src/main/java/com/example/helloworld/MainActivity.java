@@ -73,30 +73,16 @@ public class MainActivity extends AppCompatActivity {
                 }
 
 
-                final String link = blogLink.get(position);
+                final String url = blogUrl.get(position);
 
                 new Thread(new Runnable() {
                     @Override
                     public void run() {
-                        try {
-                            StringBuffer sb = new StringBuffer();
-                            sb.append("<html><body>");
-                            Document doc = Jsoup.connect(blogUrl.get(position) + link).get();
-                            Elements list = doc.select("p");
-                            for (Element element : list) {
-                                sb.append("<p>");
-                                sb.append(element.text());
-                                sb.append("</p>");
-                            }
-                            sb.append("</body></html>");
 
-                            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
-                            intent.putExtra("html", sb.toString());
-                            startActivity(intent);
+                        Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                        intent.putExtra("html", url);
+                        startActivity(intent);
 
-                        } catch (IOException e) {
-                            e.printStackTrace();
-                        }
                     }
                 }).start();
 

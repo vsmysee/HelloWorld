@@ -19,7 +19,7 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.blog);
 
         TextView textView = findViewById(R.id.back);
-        textView.setText("<< 返回");
+        textView.setText("<<");
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -32,7 +32,7 @@ public class ShowActivity extends AppCompatActivity {
         String html = intent.getStringExtra("html");
 
         WebView webView = findViewById(R.id.webview);
-        webView.loadData(html, "text/html; charset=utf-8", "UTF-8");
+        webView.loadUrl("http://myfiledata.test.upcdn.net/data/" + html + ".html");
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
