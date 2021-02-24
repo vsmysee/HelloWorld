@@ -115,6 +115,15 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < array.length(); i++) {
                                     data.add(array.getString(i));
                                     newsData.add(array.getString(i));
+
+                                    if (i % 50 == 0) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
 
                                 runOnUiThread(new Runnable() {
@@ -187,6 +196,15 @@ public class MainActivity extends AppCompatActivity {
                                     if (jo.has("url")) {
                                         blogUrl.add(jo.getString("url"));
                                     }
+
+                                    if (i % 50 == 0) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
 
                                 runOnUiThread(new Runnable() {
@@ -253,6 +271,15 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < array.length(); i++) {
                                     data.add(array.getString(i));
                                     articleData.add(array.getString(i));
+
+                                    if (i % 50 == 0) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
 
                                 runOnUiThread(new Runnable() {
@@ -314,6 +341,15 @@ public class MainActivity extends AppCompatActivity {
                                 for (int i = 0; i < array.length(); i++) {
                                     data.add(array.getString(i));
                                     bookData.add(array.getString(i));
+
+                                    if (i % 50 == 0) {
+                                        runOnUiThread(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        });
+                                    }
                                 }
 
                                 runOnUiThread(new Runnable() {
