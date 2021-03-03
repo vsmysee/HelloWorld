@@ -10,7 +10,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BlogDataSource {
-    // Database fields
+
     private SQLiteDatabase mDatabase;
     private MySQLiteHelper mDbHelper;
     private String[] mAllColumns = {MySQLiteHelper.COLUMN_ID,
@@ -61,7 +61,6 @@ public class BlogDataSource {
             rates.add(rate);
             cursor.moveToNext();
         }
-        // make sure to close the cursor
         cursor.close();
         return rates;
     }
