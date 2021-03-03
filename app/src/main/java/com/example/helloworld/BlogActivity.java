@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class BlogActivity extends AppCompatActivity {
 
+    private static final String url = "http://codecode.fun";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class BlogActivity extends AppCompatActivity {
         });
 
         WebView webView = findViewById(R.id.webview);
-        webView.loadUrl("http://codecode.fun/");
+        webView.loadUrl(url);
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
 

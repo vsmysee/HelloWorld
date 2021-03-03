@@ -2,11 +2,14 @@ package com.example.helloworld;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -27,17 +30,49 @@ import cz.msebera.android.httpclient.Header;
 public class MainActivity extends AppCompatActivity {
 
     final List<String> blogData = new ArrayList<>();
-    final List<String> blogLink = new ArrayList<>();
     final List<String> blogUrl = new ArrayList<>();
     final List<String> articleData = new ArrayList<>();
     final List<String> newsData = new ArrayList<>();
     final List<String> bookData = new ArrayList<>();
 
 
+    private BlogDataSource blogDataSource;
+
+    private static int TAB = 0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        blogDataSource = new BlogDataSource(this);
+        blogDataSource.open();
+
+        final List<String> data = new ArrayList<>();
+        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
+
+
+        Button collect = findViewById(R.id.collect);
+        collect.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                TAB = 5;
+                data.clear();
+                List<Blog> allRates = blogDataSource.getAllRates();
+
+                for (Blog allRate : allRates) {
+                    data.add(allRate.getName());
+                }
+
+                runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        adapter.notifyDataSetChanged();
+                    }
+                });
+            }
+        });
+
 
         Button me = findViewById(R.id.me_button);
         me.setOnClickListener(new View.OnClickListener() {
@@ -51,9 +86,6 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        final List<String> data = new ArrayList<>();
-        final ArrayAdapter adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, data);
-
         final ListView listView = findViewById(R.id.list_view);
         listView.setAdapter(adapter);
 
@@ -63,25 +95,79 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-                if (blogLink.size() == 0) {
-                    return;
+                if (TAB == 5) {
+
+                    final String url = blogDataSource.getAllRates().get(position).getKey();
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                            intent.putExtra("html", url);
+                            startActivity(intent);
+
+                        }
+                    }).start();
                 }
 
+                if (TAB == 4) {
 
+                    final String url = blogUrl.get(position);
+
+                    new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+
+                            Intent intent = new Intent(MainActivity.this, ShowActivity.class);
+                            intent.putExtra("html", url);
+                            startActivity(intent);
+
+                        }
+                    }).start();
+
+                }
+
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final String name = data.get(position);
                 final String url = blogUrl.get(position);
 
-                new Thread(new Runnable() {
+
+                PopupMenu popup = new PopupMenu(MainActivity.this, view);//第二个参数是绑定的那个view
+                //获取菜单填充器
+                MenuInflater inflater = popup.getMenuInflater();
+                //填充菜单
+                if (TAB == 5) {
+                    inflater.inflate(R.menu.delete, popup.getMenu());
+                }
+                if (TAB == 4) {
+                    inflater.inflate(R.menu.collect, popup.getMenu());
+                }
+                //绑定菜单项的点击事件
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
-                    public void run() {
+                    public boolean onMenuItemClick(MenuItem item) {
+                        if (item.getItemId() == R.id.collect) {
+                            blogDataSource.createRate(url, name);
+                        }
+                        if (item.getItemId() == R.id.delete) {
+                            blogDataSource.deleteRate(blogDataSource.getAllRates().get(position));
+                            data.remove(position);
+                            adapter.notifyDataSetChanged();
 
-                        Intent intent = new Intent(MainActivity.this, ShowActivity.class);
-                        intent.putExtra("html", url);
-                        startActivity(intent);
-
+                        }
+                        return false;
                     }
-                }).start();
-
-
+                });
+                //显示(这一行代码不要忘记了)
+                popup.show();
+                return false;
             }
         });
 
@@ -93,6 +179,8 @@ public class MainActivity extends AppCompatActivity {
         newsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                TAB = 1;
 
                 data.clear();
 
@@ -167,7 +255,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
 
+                TAB = 4;
+
                 data.clear();
+
 
                 if (blogData.size() == 0) {
 
@@ -190,9 +281,6 @@ public class MainActivity extends AppCompatActivity {
                                     JSONObject jo = array.getJSONObject(i);
                                     data.add(jo.getString("name"));
                                     blogData.add(jo.getString("name"));
-                                    if (jo.has("link")) {
-                                        blogLink.add(jo.getString("link"));
-                                    }
                                     if (jo.has("url")) {
                                         blogUrl.add(jo.getString("url"));
                                     }
@@ -248,6 +336,8 @@ public class MainActivity extends AppCompatActivity {
         articleBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                TAB = 2;
 
                 data.clear();
 
@@ -321,6 +411,8 @@ public class MainActivity extends AppCompatActivity {
         bookBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                TAB = 3;
 
                 data.clear();
 

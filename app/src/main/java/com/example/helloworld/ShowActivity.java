@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 public class ShowActivity extends AppCompatActivity {
 
+    private String url = "http://myfiledata.test.upcdn.net/blog/%s.html";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,7 +33,7 @@ public class ShowActivity extends AppCompatActivity {
         String html = intent.getStringExtra("html");
 
         WebView webView = findViewById(R.id.webview);
-        webView.loadUrl("http://myfiledata.test.upcdn.net/blog/" + html + ".html");
+        webView.loadUrl(String.format(url, html));
 
         webView.getSettings().setJavaScriptEnabled(true);
         webView.setWebViewClient(new WebViewClient() {
