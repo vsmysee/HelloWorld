@@ -10,7 +10,8 @@
         android:layout_height="wrap_content"
         android:textSize="18sp"
         android:textColor="@color/blue"
-        android:paddingTop="10dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="5dp"
         android:paddingLeft="10dp" />
 
 

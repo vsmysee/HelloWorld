@@ -20,7 +20,7 @@ public class ShowActivity extends AppCompatActivity {
         setContentView(R.layout.blog);
 
         TextView textView = findViewById(R.id.back);
-        textView.setText("返回");
+        textView.setText("<<返回");
 
         textView.setOnClickListener(new View.OnClickListener() {
             @Override
