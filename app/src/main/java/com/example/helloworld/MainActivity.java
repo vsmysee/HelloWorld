@@ -200,8 +200,11 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 JSONArray array = new JSONArray(responseString);
+                                RandomHelper helper = new RandomHelper();
                                 for (int i = 0; i < array.length(); i++) {
-                                    data.add(array.getString(i));
+                                    int index = helper.getIndex(array.length() + 1);
+                                    data.add(array.getString(index));
+
                                     newsData.add(array.getString(i));
 
                                     if (i % 50 == 0) {
@@ -277,8 +280,13 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 JSONArray array = new JSONArray(responseString);
+
+                                RandomHelper helper = new RandomHelper();
                                 for (int i = 0; i < array.length(); i++) {
-                                    JSONObject jo = array.getJSONObject(i);
+
+                                    int index = helper.getIndex(array.length() + 1);
+
+                                    JSONObject jo = array.getJSONObject(index);
                                     data.add(jo.getString("name"));
                                     blogData.add(jo.getString("name"));
                                     if (jo.has("url")) {
@@ -358,8 +366,10 @@ public class MainActivity extends AppCompatActivity {
 
 
                                 JSONArray array = new JSONArray(responseString);
+                                RandomHelper helper = new RandomHelper();
                                 for (int i = 0; i < array.length(); i++) {
-                                    data.add(array.getString(i));
+                                    int index = helper.getIndex(array.length() + 1);
+                                    data.add(array.getString(index));
                                     articleData.add(array.getString(i));
 
                                     if (i % 50 == 0) {
@@ -429,9 +439,14 @@ public class MainActivity extends AppCompatActivity {
                         @Override
                         public void onSuccess(int statusCode, Header[] headers, String responseString) {
                             try {
+
+
                                 JSONArray array = new JSONArray(responseString);
+                                RandomHelper helper = new RandomHelper();
                                 for (int i = 0; i < array.length(); i++) {
-                                    data.add(array.getString(i));
+                                    int index = helper.getIndex(array.length() + 1);
+                                    data.add(array.getString(index));
+
                                     bookData.add(array.getString(i));
 
                                     if (i % 50 == 0) {
