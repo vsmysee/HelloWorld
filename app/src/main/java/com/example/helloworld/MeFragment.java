@@ -21,23 +21,20 @@ public class MeFragment extends Fragment {
 
     private ArrayAdapter adapter;
 
+    final List<String> data = new ArrayList<>();
+
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.me, container, false);
 
-        final List<String> data = new ArrayList<>();
-
-        final List<Blog> allRates = ((MainActivity) getActivity()).getAllRates();
-
-        for (Blog allRate : allRates) {
-            data.add(allRate.getName());
-        }
-
         adapter = new ArrayAdapter(this.getContext(), android.R.layout.simple_list_item_1, data);
 
         final ListView listView = view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
+        refresh();
 
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -45,6 +42,8 @@ public class MeFragment extends Fragment {
 
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final List<Blog> allRates = ((MainActivity) getActivity()).getAllRates();
 
                 final String url = allRates.get(position).getKey();
 
@@ -102,6 +101,14 @@ public class MeFragment extends Fragment {
     }
 
     public void refresh() {
+
+        data.clear();
+        final List<Blog> allRates = ((MainActivity) getActivity()).getAllRates();
+
+        for (Blog allRate : allRates) {
+            data.add(allRate.getName());
+        }
+
         adapter.notifyDataSetChanged();
     }
 }

@@ -92,9 +92,15 @@ public class BlogFragment extends Fragment {
                 popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-
                         if (item.getItemId() == R.id.collect) {
                             blogDataSource.createRate(url, name);
+
+                            List<Fragment> fragments = getFragmentManager().getFragments();
+                            for (Fragment fragment : fragments) {
+                                if (fragment instanceof MeFragment) {
+                                    ((MeFragment) fragment).refresh();
+                                }
+                            }
                         }
 
                         return false;
