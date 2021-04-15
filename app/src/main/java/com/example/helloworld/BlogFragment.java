@@ -1,11 +1,16 @@
 package com.example.helloworld;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.PopupMenu;
 
 import androidx.fragment.app.Fragment;
 
@@ -25,6 +30,9 @@ import cz.msebera.android.httpclient.Header;
 
 public class BlogFragment extends Fragment {
 
+    final List<String> blogUrl = new ArrayList<>();
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.blogs, container, false);
@@ -39,6 +47,64 @@ public class BlogFragment extends Fragment {
 
         final ListView listView = view.findViewById(R.id.list_view);
         listView.setAdapter(adapter);
+
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
+
+
+                final String url = blogUrl.get(position);
+
+                new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+
+                        Intent intent = new Intent(getActivity(), ShowActivity.class);
+                        intent.putExtra("html", url);
+                        startActivity(intent);
+
+                    }
+                }).start();
+
+
+            }
+        });
+
+        listView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
+
+                final String name = data.get(position);
+                final String url = blogUrl.get(position);
+
+
+                PopupMenu popup = new PopupMenu(getActivity(), view);//第二个参数是绑定的那个view
+//获取菜单填充器
+                MenuInflater inflater = popup.getMenuInflater();
+                inflater.inflate(R.menu.collect, popup.getMenu());
+
+
+                final BlogDataSource blogDataSource = ((MainActivity) getActivity()).getBlogDataSource();
+
+                popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item) {
+
+                        if (item.getItemId() == R.id.collect) {
+                            blogDataSource.createRate(url, name);
+                        }
+
+                        return false;
+                    }
+                });
+//显示(这一行代码不要忘记了)
+                popup.show();
+                return false;
+            }
+        });
 
         AsyncHttpClient asyncHttpClient = new AsyncHttpClient();
         String url = "http://myfiledata.test.upcdn.net/data/" + day + "-blogs.json";
@@ -62,6 +128,9 @@ public class BlogFragment extends Fragment {
 
                         JSONObject jo = array.getJSONObject(index);
                         data.add(jo.getString("name"));
+                        if (jo.has("url")) {
+                            blogUrl.add(jo.getString("url"));
+                        }
 
 
                         if (i % 50 == 0) {

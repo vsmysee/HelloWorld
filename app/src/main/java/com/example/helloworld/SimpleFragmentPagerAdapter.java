@@ -18,6 +18,7 @@ public class SimpleFragmentPagerAdapter extends FragmentStateAdapter {
         lists.add(new BooksFragment());
         lists.add(new ArticlesFragment());
         lists.add(new BlogFragment());
+        lists.add(new MeFragment());
     }
 
 
@@ -28,7 +29,7 @@ public class SimpleFragmentPagerAdapter extends FragmentStateAdapter {
     @NonNull
     @Override
     public Fragment createFragment(int position) {
-       return lists.get(position);
+        return lists.get(position);
     }
 
     @Override
