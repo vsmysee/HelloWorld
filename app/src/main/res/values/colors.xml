@@ -5,4 +5,13 @@
     <color name="colorAccent">#03DAC5</color>
     <color name="blue">#0000FF</color>
 
+    <color name="colorDivide">#80515460</color>
+
+    <color name="colorBackground">#FFF7F8FC</color>
+
+    <color name="colorGray3">#333333</color>
+
+
+
+
 </resources>
