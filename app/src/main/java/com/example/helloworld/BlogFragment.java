@@ -24,13 +24,15 @@ import org.json.JSONObject;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 
 public class BlogFragment extends Fragment {
 
-    final List<String> blogUrl = new ArrayList<>();
+    private Map<String, String> urlMap = new HashMap<>();
 
 
     @Override
@@ -51,12 +53,10 @@ public class BlogFragment extends Fragment {
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
-
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int position, long id) {
 
-
-                final String url = blogUrl.get(position);
+                final String url = urlMap.get(data.get(position));
 
                 new Thread(new Runnable() {
                     @Override
@@ -78,11 +78,9 @@ public class BlogFragment extends Fragment {
             public boolean onItemLongClick(AdapterView<?> parent, View view, final int position, long id) {
 
                 final String name = data.get(position);
-                final String url = blogUrl.get(position);
+                final String url = urlMap.get(name);
 
-
-                PopupMenu popup = new PopupMenu(getActivity(), view);//第二个参数是绑定的那个view
-//获取菜单填充器
+                PopupMenu popup = new PopupMenu(getActivity(), view);
                 MenuInflater inflater = popup.getMenuInflater();
                 inflater.inflate(R.menu.collect, popup.getMenu());
 
@@ -106,7 +104,6 @@ public class BlogFragment extends Fragment {
                         return false;
                     }
                 });
-//显示(这一行代码不要忘记了)
                 popup.show();
                 return false;
             }
@@ -124,7 +121,6 @@ public class BlogFragment extends Fragment {
             public void onSuccess(int statusCode, Header[] headers, String responseString) {
                 try {
 
-
                     JSONArray array = new JSONArray(responseString);
 
                     RandomHelper helper = new RandomHelper();
@@ -133,11 +129,9 @@ public class BlogFragment extends Fragment {
                         int index = helper.getIndex(array.length() + 1);
 
                         JSONObject jo = array.getJSONObject(index);
-                        data.add(jo.getString("name"));
-                        if (jo.has("url")) {
-                            blogUrl.add(jo.getString("url"));
-                        }
-
+                        String name = jo.getString("name");
+                        data.add(name);
+                        urlMap.put(name, jo.getString("url"));
 
                         if (i % 50 == 0) {
                             getActivity().runOnUiThread(new Runnable() {
